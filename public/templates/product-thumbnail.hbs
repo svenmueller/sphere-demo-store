@@ -2,9 +2,9 @@
     <div class="product-image">
         <a id="link-product-{{slug}}" href="{{variant.url}}">
             {{#if isFeatured}}
-                <img src="{{variant.image.medium.url}}" width="{{variant.image.medium.width}}" height="{{variant.image.medium.height}}" />
+                <img src="{{variant.image.original.url}}" height="400px" />
             {{else}}
-                <img src="{{variant.image.small.url}}" width="{{variant.image.small.width}}" height="{{variant.image.small.height}}" />
+                <img src="{{variant.image.original.url}}" height="150px" />
             {{/if}}
         </a>
     </div>
