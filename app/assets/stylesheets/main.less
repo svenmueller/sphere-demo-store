@@ -1,0 +1,124 @@
+@import "demo/colors";
+@import "demo/mixins";
+@import "demo/header";
+@import "demo/category";
+@import "demo/product";
+@import "demo/cart";
+@import "demo/checkout";
+@import "demo/login";
+@import "demo/customer";
+
+body {
+    font-family: 'Lucida Grande', sans-serif;
+    font-weight: 400;
+    background: @background;
+    color: @gray-text;
+    padding-top: 65px;
+}
+
+body.home {
+    #header-img {
+        background-color: #000000;
+        background-image: url('/assets/images/burton_header.jpg');
+        background-repeat: no-repeat;
+        background-position: center 0px;
+        height: 350px;
+    }
+}
+
+.container {
+    width: inherit;
+}
+
+form {
+    margin: 0;
+}
+
+#jump-to-top {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+    padding: 12px 10px 10px;
+    .border-radius(4px 4px 0 0);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar-subcategories {
+    margin-top: 40px;
+}
+
+@media (max-width: 979px) {
+    body {
+        padding-top: 0;
+        .navbar-fixed-top .navbar-inner,
+        .navbar-fixed-bottom .navbar-inner {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    body {
+        &.category {
+
+        }
+    }
+}
+
+.btn-success {
+    font-weight: bold;
+}
+
+ul.address {
+    .unstyled;
+
+    span.company:not(:empty), span.city:not(:empty) {
+        &:before {
+            content: "(";
+        }
+        &:after {
+            content: ")";
+        }
+    }
+}
+
+form {
+    input[aria-invalid=true], textarea[aria-invalid=true], select[aria-invalid=true] {
+        background-color: @light-red;
+    }
+
+    .messages {
+        display: inline-block;
+    }
+
+    .alert {
+        display: inline-block;
+        margin: 0 30px 0;
+        padding: 0;
+        .border-radius(0);
+        border-width: 0;
+        border-bottom-width: 3px;
+        background: transparent;
+        color: @gray-text;
+    }
+
+    .control-group {
+        .help-inline {
+            float: none;
+            border-style: solid;
+            border-width: 0;
+            color: @gray-text !important;
+        }
+
+        &.error .help-inline {
+            border-color: rgb(238, 211, 215);
+            border-bottom-width: 3px;
+        }
+    }
+}
+

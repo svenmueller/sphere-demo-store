@@ -1,0 +1,25 @@
+@(search: SearchResult[Product], page: Int, sort: String, category: Category = null)
+
+@defining(ListProducts.getJson(search, category, sort)) { data =>
+
+@defining(getTemplate("product-thumbnail")) { template =>
+    <script id="product-item-template" type="text/x-handlebars-template">
+        @Html(template.text)
+    </script>
+
+    <div id="product-list">
+        @Html(renderTemplateProductList(template, data))
+    </div>
+}
+
+@defining(getTemplate("product-pager")) { template =>
+    <script id="product-pager-template" type="text/x-handlebars-template">
+        @Html(template.text)
+    </script>
+
+    <div id="product-pager">
+        @Html(renderTemplate(template, data))
+    </div>
+}
+
+}

@@ -1,0 +1,114 @@
+@(product: Product, variant: Variant, category: Category)
+
+@scripts = {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"
+            data-main="@routes.Assets.at("javascripts/product-page.js")" ></script>
+}
+
+@main(product.getName, "product", scripts){
+    <div class="navigation">
+        @helper.topNavigation(category)
+    </div>
+}{
+    @helper.breadcrumb(category, product)
+
+    <div id="product-detail" class="product-detail clearfix">
+        <div class="detail">
+            <div class="info">
+                <img class="img-polaroid" src="@variant.getFeaturedImage.getSize(ImageSize.LARGE).getUrl"/>
+                <div class="product-name">
+                    <p>@product.getName</p>
+                </div>
+                <p>@Html(product.getDescription)</p>
+            </div>
+        </div>
+
+        <aside class="action">
+
+            <h5>@product.getName</h5>
+            <h4>@variant.getPrice.getValue</h4>
+
+
+            <div class="product-availability">
+                @getStockInformation(variant)
+            </div>
+
+
+            @if(!variant.getSKU.isEmpty){
+            <div class="product-sku">
+                SKU: @variant.getSKU
+            </div>
+            }
+
+            <div class="product-info-variants">
+                @if(hasMoreColors(product)) {
+                <div class="product-info-variants-color">
+                    <ul>
+                        @for(variantColor <- getPossibleVariants(product, variant, "color")) {
+                        <li class="@if(variantColor.getId == variant.getId){active}">
+                            <a id="link-product-@product.getSlug-@variantColor.getId" href="@getProductUrl(product, variantColor, category)">
+                                <img src="@variantColor.getFeaturedImage.getSize(ImageSize.THUMBNAIL).getUrl"
+                                     class="img-circle" title="@variantColor.getString("color")" />
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                </div>
+                }
+
+                @if(hasMoreSizes(product)) {
+                <div class="product-info-variant product-info-variant-size">
+                    <label>Size</label>
+                    <ul>
+                        @for(variantSize <- getPossibleVariants(product, variant, "size")) {
+                        <li class="@if(variantSize.getId == variant.getId){active}">
+                            <a id="link-product-@product.getSlug-@variantSize.getId"
+                               href="@getProductUrl(product, variantSize, category)" data-variant="@variantSize.getId">
+                                @variantSize.getString("size")
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                </div>
+                }
+
+            @for(attribute <- product.getAttributes) {
+                @if(attribute.getName != "color" && attribute.getName != "size") {
+                @if(hasMoreAttributeValues(product, attribute.getName)) {
+                <div class="product-info-variant">
+                    <label>@capitalizeInitials(attribute.getName) option</label>
+                    <ul>
+                        @for(matchedVariant <- getPossibleVariants(product, variant, attribute.getName)) {
+                        <li class="@if(matchedVariant.getId == variant.getId){active}">
+                            <a id="link-product-@product.getSlug-@matchedVariant.getId"
+                               href="@getProductUrl(product, matchedVariant, category)">
+                                @matchedVariant.getString(attribute.getName)
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                </div>
+                }
+                }
+            }
+            </div>
+
+            <div class="product-info-buy">
+                <form id="form-add-to-cart" action="@routes.Carts.add" method="post">
+                    <input type="hidden" name="productId" value="@product.getId" />
+                    <input type="hidden" name="variantId" value="@variant.getId" />
+                    <input type="number" name="quantity" value="1" min="1" max="10" class="input-mini" />
+                    <div>
+                        <button type="submit" name="addToCart-product" data-loading-text="Adding..." class="btn btn-success btn-large">
+                            <i class="icon-shopping-cart icon-white"></i> Add to Cart
+                        </button>
+                    <div>
+                </form>
+            </div>
+
+        </aside>
+
+    </div>
+}{
+
+}

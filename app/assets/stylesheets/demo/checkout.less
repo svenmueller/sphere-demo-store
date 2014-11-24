@@ -1,0 +1,210 @@
+#checkout {
+    .column-detail-style;
+    .step-layout-style;
+}
+
+#checkout-cart {
+    .cart-content {
+        .unstyled;
+
+        .item-container {
+            padding: 10px 5px;
+            border-top: 1px solid @light-gray;
+            font-size: 12px;
+
+            .item-picture {
+                float: left;
+                padding: 10px 0;
+            }
+
+            .item-description {
+                padding-left: 170px;
+            }
+
+            .item-main {
+
+                .item-name {
+                    display: table-cell;
+                }
+
+                .item-action {
+                    float: right;
+                    display: table;
+
+                    li {
+                        padding: 0 20px;
+                        display: table-cell;
+                    }
+                }
+            }
+
+            .item-detail {
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid @lightest-gray;
+
+                .item-remove {
+                    float: right;
+                }
+            }
+
+            .item-total-price {
+                color: @darkest-gray;
+                font-size: 14px;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+#checkout-address {
+    .step-body {
+        margin-left: 50px;
+
+        h5 {
+            margin-top: 10px;
+        }
+
+        #shipping-address-list {
+            float: right;
+            margin-right: 50px;
+
+            ul {
+                .unstyled;
+
+                .address-item {
+                    padding: 8px 12px;
+                    margin: 2px 2px 3px 0;
+                    line-height: 14px;
+                    .border-radius(5px);
+
+                    &:hover {
+                        background-color: @background;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+        #shipping-address-form {
+            float: left;
+        }
+
+        .form {
+            margin-left: 50px;
+        }
+
+        .form-summary {
+            span.company:not(:empty), span.city:not(:empty) {
+                &:before {
+                    content: "(";
+                }
+                &:after {
+                    content: ")";
+                }
+            }
+        }
+    }
+}
+
+#checkout-shipping {
+
+    .step-body {
+        margin-left: 50px;
+
+        #shipping-method-form {
+            float: left;
+            margin-top: 40px;
+            width: 70%;
+
+            .name { display: block; font-weight: bold; }
+            .price {
+                float: right;
+                font-weight: bold;
+                margin-right: 50px;
+            }
+
+        }
+    }
+}
+
+#checkout-billing {
+    .step-body {
+        margin-left: 50px;
+    }
+
+    #billing-method-form {
+        .choose-type {
+            margin-bottom: 20px;
+        }
+        .card-cvc, .card-expiry-month, .card-expiry-year {
+            width: 88px;
+        }
+    }
+
+    .form-summary {
+        span.month:not(:empty) {
+            &:after {
+                content: "/";
+            }
+        }
+        span.cvc:not(:empty) {
+            &:before {
+                content: "(";
+            }
+            &:after {
+                content: ")";
+            }
+        }
+    }
+}
+
+#checkout-footer {
+    .summary {
+         float: right;
+         width: 350px;
+         padding: 20px;
+    }
+
+    button[type=submit] {
+        margin-top: 20px;
+        display: none;
+    }
+}
+
+#checkout {
+    .step {
+        .form-summary {
+            font-size: 12px;
+            .unstyled;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        &.disabled {
+            .step-header {
+                opacity: 0.4;
+            }
+            .step-body, .step-footer {
+                display: none;
+            }
+        }
+
+        &.visited {
+            .increase {
+                zoom: 0.5;
+                -moz-transform: scale(0.5);
+            }
+            .show {
+                display: none;
+            }
+            .hide {
+                display: block;
+            }
+            .step-footer {
+                display: none;
+            }
+        }
+    }
+}

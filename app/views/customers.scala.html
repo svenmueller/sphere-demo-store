@@ -1,0 +1,139 @@
+@(customer: Customer, orders: List[Order], updateCustomerForm: Form[customerForm.UpdateCustomer], updatePasswordForm: Form[passwordForm.UpdatePassword])
+
+@scripts = {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"
+            data-main="@routes.Assets.at("javascripts/customer-page.js")" ></script>
+
+    <script id="update-address-template" type="text/x-handlebars-template">
+        <li class="address-item" id="address-{{addressId}}">
+            <button type="button" class="btn btn-link open-update-address"><i class="icon-edit"></i> edit</button>
+            <form class="form-remove-address" action="@routes.Addresses.remove" method="post">
+                <input type="hidden" name="addressId" value="{{addressId}}" required />
+                <button type="submit" class="btn btn-link" data-loading-text="removing...."><i class="icon-remove"></i> remove</button>
+            </form>
+            <ul class="address">
+                <li>
+                    <span class="first-name">{{firstName}}</span>
+                    <span class="last-name">{{lastName}}</span>
+                    <span class="company">{{company}}</span>
+                </li>
+                <li>
+                    <span class="street">{{street}}</span>
+                </li>
+                <li>
+                    <span class="street">{{street2}}</span>
+                </li>
+                <li>
+                    <span class="postal-code">{{postalCode}}</span>
+                    <span class="city">{{city}}</span>
+                    <span class="country">{{countryName}}</span>
+                </li>
+                <li>
+                    <span class="phone">{{phone}}</span>
+                </li>
+                <li>
+                    <span class="mobile">{{mobile}}</span>
+                </li>
+                <li>
+                    <span class="email">{{email}}</span>
+                </li>
+            </ul>
+            <form class="form-update-address" action="@routes.Addresses.update" method="post">
+                <input type="hidden" name="addressId" value="{{addressId}}" required />
+                @form.setAddress()
+                <button type="submit" class="btn btn-success" data-loading-text="Saving...">Save</button>
+            </form>
+        </li>
+    </script>
+
+    <script id="add-address-template" type="text/x-handlebars-template">
+        @form.setAddress()
+        <button type="submit" class="btn btn-success" data-loading-text="Saving...">
+            Save
+        </button>
+        <div class="messages"></div>
+    </script>
+}
+
+@main("Customer", "customer", scripts){
+<div class="navigation">
+    @helper.topNavigation()
+</div>
+}{
+<div id="customer">
+
+    <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tab-profile" data-toggle="tab">
+                    User profile
+                </a>
+            </li>
+            <li>
+                <a href="#tab-update-data" data-toggle="tab">
+                    Change data
+                </a>
+            </li>
+            <li>
+                <a href="#tab-update-password" data-toggle="tab">
+                    Change password
+                </a>
+            </li>
+            <li>
+                <a href="#tab-address-book" data-toggle="tab">
+                    Address book
+                </a>
+            </li>
+            <li>
+                <a href="#tab-orders" data-toggle="tab">
+                    Orders
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab-profile">
+                <p>Welcome <span data-form-update="customer-firstName">@customer.getName.getFirstName!</span></p>
+            </div>
+
+            <div class="tab-pane" id="tab-update-data">
+                <form id="form-update-customer" action="@routes.Customers.update" method="post">
+                    @form.updateCustomer(updateCustomerForm)
+                    <button type="submit" class="btn btn-success" data-loading-text="Saving...">
+                        Save
+                    </button>
+                    <div class="messages"></div>
+                </form>
+            </div>
+
+            <div class="tab-pane" id="tab-update-password">
+                <form id="form-update-password" action="@routes.Customers.updatePassword" method="post">
+                    @form.updatePassword(updatePasswordForm)
+                    <button type="submit" class="btn btn-success" data-loading-text="Saving...">
+                        Save
+                    </button>
+                    <div class="messages"></div>
+                </form>
+            </div>
+
+            <div class="tab-pane" id="tab-address-book">
+                <form id="form-add-address" action="@routes.Addresses.add" method="post">
+                    @* Load with add address template *@
+                    @form.setAddress()
+                </form>
+                <button type="button" class="btn btn-link open-add-address"><i class="icon-plus"></i> Add new address</button>
+                <ul id="address-list" data-url="@routes.Addresses.getList">
+                    @* Load with update address template *@
+                </ul>
+            </div>
+
+            <div class="tab-pane" id="tab-orders">
+                @helper.orderList(orders)
+            </div>
+        </div>
+    </div>
+
+</div>
+}{
+
+
+}

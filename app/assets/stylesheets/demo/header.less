@@ -1,0 +1,38 @@
+.navigation {
+    border-bottom: 1px solid @light-gray;
+    background-color: lighten(@background, 2%);
+}
+
+#top-navigation {
+    .container {
+        .brand {
+            font-size: 16px; font-weight: bold;
+            &:first-letter { font-size: 20px; }
+        }
+        li.nav-link {
+            color: @brown-text; font-weight: bold;
+        }
+    }
+
+    .btn-mini-cart {
+        .border-radius(50%);
+        border: 3px solid @dark;
+        padding: 12px;
+        width: 15px;
+        height: 15px;
+        opacity: 0.2;
+        i {
+            margin: 0;
+            zoom: 1.2;
+        }
+    }
+}
+
+.breadcrumb {
+    background-color: transparent;
+    .active { font-size: 20px; }
+}
+
+#sub-menu {
+  z-index: 100;
+}

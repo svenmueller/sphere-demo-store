@@ -1,0 +1,19 @@
+@(search: SearchResult[Product], page: Int, sort: String, category: Category)
+
+@scripts = {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"
+            data-main="@routes.Assets.at("javascripts/list-page.js")" ></script>
+}
+
+@main(category.getName, "category", scripts){
+    <div class="navigation">
+        @helper.topNavigation(category)
+    </div>
+}{
+    @helper.breadcrumb(category)
+    <div id="category-product-list" class="clearfix">
+        @helper.productList(search, page, sort, category)
+    </div>
+}{
+    @helper.jumpToTop()
+}

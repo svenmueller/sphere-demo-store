@@ -1,0 +1,18 @@
+@(search: SearchResult[Product], page: Int, sort: String)
+
+@scripts = {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"
+            data-main="@routes.Assets.at("javascripts/list-page.js")" ></script>
+}
+
+@main("Home", "home", scripts){
+    <div class="navigation">
+        @helper.topNavigation()
+    </div>
+}{
+    <div id="featured-product-list" class="clearfix">
+        @helper.productList(search, page, sort)
+    </div>
+}{
+    @helper.jumpToTop()
+}

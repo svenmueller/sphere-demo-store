@@ -1,0 +1,226 @@
+.border-radius(@radius) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.popover {
+    z-index: 1030;
+}
+
+.unstyled {
+    margin-left: 0;
+    list-style: none;
+}
+
+.clearfix {
+    *zoom: 1;
+    &:before,
+    &:after {
+        display: table;
+        content: "";
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+.back {
+    margin-bottom: 20px;
+}
+
+.column-detail-plain-style {
+    width: 940px;
+    margin: 40px auto 70px;
+
+    .footer {
+        .clearfix;
+
+        .left {
+            padding: 20px;
+            float: left;
+        }
+
+        .right {
+            padding: 20px;
+            float: right;
+        }
+    }
+}
+
+.column-detail-style {
+    .column-detail-plain-style;
+    box-shadow: 0 1px 1px #ddd;
+    .border-radius(4px);
+    background-color: @foreground;
+}
+
+.column-divided-style {
+    width: 400px;
+    box-shadow: 0 1px 1px #ddd;
+    .border-radius(4px);
+    background-color: @foreground;
+}
+
+.column-aside-style {
+    float: right;
+    width: 260px;
+}
+
+.cart-style {
+    thead th {
+        text-align: center;
+        &:first-child {
+            text-align: left;
+        }
+    }
+
+    .item-line {
+        .item-picture {
+            float: left;
+            text-align: center;
+            padding: 5px 10px;
+            margin-right: 10px;
+        }
+
+        .item-quantity, .item-price, .item-total-price {
+            text-align: center;
+        }
+    }
+}
+
+.order-summary {
+    width: 350px;
+
+    ul {
+        .unstyled;
+
+        li {
+            border-top: 1px dotted @light-gray;
+            font-size: 12px;
+            padding: 5px 0px;
+
+            &:first-child {
+                border-top: 0;
+            }
+            &.subtotal {
+                color: @black-text;
+                font-weight: bold;
+            }
+            &.total {
+                color: @black-text;
+                font-size: 16px;
+                font-weight: bold;
+                border-top-style: solid;
+            }
+            &.taxes {
+                font-size: 10px;
+            }
+
+            span {
+                float: right;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.order-item {
+    font-size: 12px;
+
+    h4 {
+        font-size: 15px;
+        font-weight: bold;
+        margin-top: 40px;
+        border-bottom: 1px solid @lightest-gray;
+    }
+
+    .order-line-items {
+        ul {
+            .unstyled;
+            .item-quantity, .item-name, .item-price {
+                margin-right: 10px;
+                font-size: 13px;
+                color: @black-text;
+            }
+            .item-name {
+                font-weight: bold;
+            }
+            .item-attributes {
+                margin-left: 30px;
+            }
+        }
+    }
+
+    .order-address {
+
+    }
+
+    .order-price-summary {
+
+    }
+}
+
+.step-layout-style {
+    .step {
+        border-bottom: 2px solid @lightest-gray;
+    }
+
+    .step-header {
+        .clearfix;
+        padding: 10px 20px;
+
+        .step-number {
+            .border-radius(50%);
+            border: 2px solid @bright-blue;
+            display: inline-block;
+            text-align: center;
+            width: 20px;
+            height: 20px;
+            font-size: 20px;
+        }
+
+        h3 {
+            padding-left: 5px;
+            display: inline;
+            font-size: 20px;
+        }
+
+        .btn-edit {
+            float: right;
+            margin-top: 5px;
+        }
+    }
+
+    .step-body {
+        .clearfix;
+        padding: 0 20px 20px;
+    }
+
+    .step-footer {
+        .clearfix;
+        padding: 0 20px 20px;
+
+        .btn-next {
+            float: right;
+        }
+    }
+}
+
+.product-info-variants-style {
+    ul {
+        list-style: none;
+        margin: 0;
+
+        li {
+            display: inline-block;
+            padding: 2px;
+            border: 2px solid @lightest-gray;
+            .border-radius(50%);
+
+            &.active {
+                border-color: @bright-blue;
+            }
+        }
+    }
+}

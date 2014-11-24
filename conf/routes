@@ -1,0 +1,71 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Redirect without trailing slash
+GET     /*path/                                             controllers.Application.move(path: String)
+GET     /mu-0cfddd07-d18f67e6-3f846e91-65f37a14             controllers.Application.blitz()
+
+# Home
+GET     /                                                   controllers.Categories.home(sort: String ?= "", page: Int ?= 1)
+
+GET     /search                                             controllers.Categories.search(sort: String ?= "", page: Int ?= 1)
+GET     /product/list                                       controllers.Categories.listProducts(category: String ?= "", sort: String ?= "", page: Int ?= 1)
+
+# Cart
+GET     /cart                                               controllers.Carts.show()
+GET     /cart/get                                           controllers.Carts.get()
+
+POST    /cart/add                                           controllers.Carts.add()
+POST    /cart/update                                        controllers.Carts.update()
+POST    /cart/remove                                        controllers.Carts.remove()
+
+# Checkout
+GET     /checkout                                           controllers.Checkouts.show()
+POST    /checkout                                           controllers.Checkouts.submit()
+
+GET     /checkout/address/get                               controllers.Checkouts.getShippingAddress()
+GET     /checkout/address                                   controllers.Checkouts.showShippingAddress()
+POST    /checkout/address                                   controllers.Checkouts.setShippingAddress()
+
+GET     /checkout/shipping/get                              controllers.Checkouts.getShippingMethod()
+GET     /checkout/shipping/                                 controllers.Checkouts.showShippingMethod()
+POST    /checkout/shipping/                                 controllers.Checkouts.setShippingMethod()
+
+GET     /checkout/payment                                   controllers.Checkouts.showPaymentMethod()
+
+# Login
+GET     /user/login                                         controllers.Login.show()
+POST    /user/login                                         controllers.Login.logIn()
+GET     /user/logout                                        controllers.Login.logOut()
+
+GET     /user/register                                      controllers.Login.showSignUp()
+POST    /user/register                                      controllers.Login.signUp()
+GET     /user/verify/:token                                 controllers.Login.verify(token: String)
+
+POST    /user/password/recover                              controllers.Login.recoverPassword()
+GET     /user/password/reset/:token                         controllers.Login.showResetPassword(token: String)
+POST    /user/password/reset                                controllers.Login.resetPassword()
+
+# Customer
+GET     /user                                               controllers.Customers.show()
+
+POST    /user/update                                        controllers.Customers.update()
+POST    /user/update/password                               controllers.Customers.updatePassword()
+
+# Address
+GET     /user/address/get                                   controllers.Addresses.getList()
+GET     /user/address/get/:id                               controllers.Addresses.get(id: String)
+
+POST    /user/address/add                                   controllers.Addresses.add()
+POST    /user/address/update                                controllers.Addresses.update()
+POST    /user/address/remove                                controllers.Addresses.remove()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                                       controllers.Assets.at(path="/public", file)
+
+# Product
+GET     /:product-$variant<[0-9]+>.html                     controllers.Products.select(product: String, variant: Int)
+
+# Category
+GET     /:category                                          controllers.Categories.select(category: String, sort: String ?= "", page: Int ?= 1)

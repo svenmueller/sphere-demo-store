@@ -1,0 +1,94 @@
+@(cart: Cart)
+
+@scripts = {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"
+            data-main="@routes.Assets.at("javascripts/cart-page.js")" ></script>
+
+    <script id="cart-item-template" type="text/x-handlebars-template">
+        <li id="item-line-{{itemId}}" class="item-line">
+            <div class="item-container clearfix">
+                <div class="item-picture">
+                    <img src="{{image.small}}" alt="{{productName}}" />
+                </div>
+                <div class="item-description">
+                    <div class="item-main">
+                        <ul class="item-action">
+                            <li class="item-price">
+                                {{price}} {{currency}}
+                            </li>
+                            <li class="item-quantity">
+                                <fieldset>
+                                    <form class="form-update-cart" action="@routes.Carts.update" method="post">
+                                        <input type="hidden" name="lineItemId" value="{{itemId}}"/>
+                                        <input type="number" name="quantity" min="1" max="10" value="{{quantity}}" class="input-mini" />
+                                    </form>
+                                </fieldset>
+                            </li>
+                            <li class="item-total-price">
+                                <span id="item-total-price-{{itemId}}">{{totalPrice}} {{currency}}</span>
+                            </li>
+                        </ul>
+                        <div class="item-name">
+                            <h5>{{productName}}</h5>
+                        </div>
+                    </div>
+                    <div id="item-line-product-{{productId}}-{{variantId}}" class="item-detail">
+                        <div class="item-remove">
+                            <form class="form-remove-from-cart" action="@routes.Carts.remove" method="post">
+                                <input type="hidden" name="lineItemId" value="{{itemId}}"/>
+                                <button type="submit" name="remove" data-loading-text="Removing..." class="btn btn-link">
+                                    Remove
+                                </button>
+                            </form>
+                        </div>
+                        <ul class="unstyled">
+                            {{#each attribute}}
+                            <li><strong>{{name}}:</strong> {{value}}</li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </script>
+}
+
+@main("Cart", "cart", scripts){
+    <div class="navigation">
+        @helper.topNavigation()
+    </div>
+}{
+    <div id="cart">
+
+        <div id="cart-cart" class="clearfix">
+
+            <div class="step-header">
+                <h3>Shopping cart</h3>
+            </div>
+
+            <div class="step-body">
+                <ul id="cart-content" data-url="@routes.Carts.get" class="cart-content unstyled">
+                    @* Load with template *@
+                </ul>
+            </div>
+        </div>
+
+        <div id="cart-footer" class="footer">
+            <div class="left">
+                <a href="@getReturnUrl" class="btn">
+                    <i class="icon-chevron-left"></i> Continue shopping
+                </a>
+            </div>
+            <div class="right">
+                @helper.orderSummary(cart)
+                <a href="@routes.Checkouts.show" class="btn btn-success">
+                    Proceed to checkout <i class="icon-chevron-right icon-white"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+}{
+
+
+}

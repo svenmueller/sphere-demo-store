@@ -1,0 +1,376 @@
+@(cart: Cart, addressBook: List[Address], setAddressForm: Form[addressForm.SetAddress], setShippingForm: Form[checkoutForm.SetShippingMethod], section: Int = 1)
+
+@scripts = {
+    <script type="text/javascript">var PAYMILL_PUBLIC_KEY = '@paymillPublicKey';</script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"
+            data-main="@routes.Assets.at("javascripts/checkout-page.js")" ></script>
+
+    <script id="shipping-address-template" type="text/x-handlebars-template">
+        @form.setAddress()
+    </script>
+
+    <script id="shipping-method-template" type="text/x-handlebars-template">
+        {{#each method}}
+        <label class="radio">
+            <input type="radio" name="method" value="{{id}}" id="shipping-method-{{id}}" required
+                   data-price="{{price}} {{currency}}" data-name="{{name}}" data-description="{{description}}"
+                    {{#if select}}checked{{/if}} >
+            <span class="price">{{price}} {{currency}}</span>
+            <span class="name">{{name}}</span>
+            <span class="description">{{description}}</span>
+        </label>
+        {{/each}}
+    </script>
+}
+
+@main("Checkout", "checkout", scripts){
+    <div class="navigation">
+        @helper.topNavigation()
+    </div>
+}{
+    <div id="checkout">
+        <div id="checkout-cart" class="step clearfix current">
+
+            <div class="step-header">
+                <span class="step-number">1</span>
+                <h3>Cart summary</h3>
+                <button type="button" class="btn btn-edit hide">
+                    Change <i class="icon-edit"></i>
+                </button>
+            </div>
+
+            <div class="step-body">
+                <ul class="cart-content unstyled">
+                    @for(item <- cart.getLineItems) {
+                    <li id="item-line-@item.getId" class="item-line">
+                        <div class="item-container clearfix">
+                            <div class="item-picture increase">
+                                <img src="@item.getVariant.getFeaturedImage.getSize(ImageSize.SMALL).getUrl" alt="@item.getProductName" />
+                            </div>
+                            <div class="item-description">
+                                <div class="item-main">
+                                    <ul class="item-action">
+                                        @if(item.getQuantity > 1) {
+                                        <li class="item-price">
+                                            @item.getPrice.getValue
+                                        </li>
+                                        <li class="item-quantity">
+                                            @item.getQuantity
+                                        </li>
+                                        }
+                                        <li class="item-total-price">
+                                            <span id="item-total-price-@item.getId">@item.getTotalPrice</span>
+                                        </li>
+                                    </ul>
+                                    <div class="item-name">
+                                        <h5>@item.getProductName</h5>
+                                    </div>
+                                </div>
+                                <div class="item-detail show">
+                                     <ul class="unstyled">
+                                        @for(attribute <- item.getVariant.getAttributes) {
+                                        <li><strong>@capitalizeInitials(attribute.getName):</strong> @attribute.getString</li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    }
+                </ul>
+            </div>
+
+            <div class="step-footer">
+                <div class="left">
+                    <a href="@routes.Carts.show" class="btn">
+                        <i class="icon-chevron-left"></i> Modify cart
+                    </a>
+                </div>
+                <div class="right">
+                    <button type="button" class="btn btn-success btn-next">
+                        Next <i class="icon-chevron-right icon-white"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <form id="form-shipping-address" action="@routes.Checkouts.setShippingAddress" method="post">
+            <div id="checkout-address" class="step disabled clearfix">
+                <div class="step-header">
+                    <span class="step-number">2</span>
+                    <h3>Address</h3>
+                    <button type="button" class="btn btn-edit hide">
+                        Change <i class="icon-edit"></i>
+                    </button>
+                </div>
+
+                <div class="step-body">
+                    @if(!addressBook.isEmpty) {
+                    <div id="shipping-address-list" class="show">
+                        <h4>Your address book</h4>
+                        <ul>
+                            @for(address <- addressBook) {
+                            <li class="address-item" data-url="@routes.Addresses.get(address.getId)">
+                                <ul class="address">
+                                    <li>
+                                        <span class="first-name">@address.getFirstName</span>
+                                        <span class="last-name">@address.getLastName</span>
+                                        <span class="company">@address.getCompany</span>
+                                    </li>
+                                    <li>
+                                        <span class="street">@address.getStreetName</span>
+                                    </li>
+                                    <li>
+                                        <span class="street">@address.getStreetNumber</span>
+                                    </li>
+                                    <li>
+                                        <span class="postal-code">@address.getPostalCode</span>
+                                        <span class="city">@address.getCity</span>
+                                        <span class="country">@address.getCountry.getName</span>
+                                    </li>
+                                    <li>
+                                        <span class="phone">@address.getPhone</span>
+                                    </li>
+                                    <li>
+                                        <span class="mobile">@address.getMobile</span>
+                                    </li>
+                                    <li>
+                                        <span class="email">@address.getEmail</span>
+                                    </li>
+                                </ul>
+                            </li>
+                            }
+                        </ul>
+                    </div>
+                    }
+
+                    <div id="shipping-address-form" data-url="@routes.Checkouts.getShippingAddress" class="show">
+                        @* Load with shipping address template *@
+                    </div>
+
+                    <div class="address hide">
+                        <ul id="shipping-address-summary" class="form-summary address">
+                            <li>
+                                <span data-form="firstName" class="first-name">
+                                    @setAddressForm.field("firstName").value
+                                </span>
+                                <span data-form="lastName" class="last-name">
+                                    @setAddressForm.field("lastName").value
+                                </span>
+                                <span data-form="company" class="company">
+                                    @setAddressForm.field("company").value
+                                </span>
+                            </li>
+                            <li>
+                                <span data-form="street" class="street">
+                                    @setAddressForm.field("street").value
+                                </span>
+                            </li>
+                            <li>
+                                <span data-form="street2" class="street">
+                                    @setAddressForm.field("street2").value
+                                </span>
+                            </li>
+                            <li>
+                                <span data-form="postalCode" class="postal-code">
+                                    @setAddressForm.field("postalCode").value
+                                </span>
+                                <span data-form="city" class="city">
+                                    @setAddressForm.field("city").value
+                                </span>
+                                <span data-form="country" class="country">
+                                    @setAddressForm.field("country").value
+                                </span>
+                            </li>
+                            <li>
+                                <span data-form="phone" class="phone">
+                                    @setAddressForm.field("phone").value
+                                </span>
+                            </li>
+                            <li>
+                                <span data-form="mobile" class="mobile">
+                                    @setAddressForm.field("mobile").value
+                                </span>
+                            </li>
+                            <li>
+                                <span data-form="email" class="email">
+                                    @setAddressForm.field("email").value
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-footer">
+                    <div class="messages"></div>
+                    <button type="submit" class="btn btn-success btn-next" data-loading-text="Saving...">
+                         Next <i class="icon-chevron-right icon-white"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <form id="form-shipping-method" action="@routes.Checkouts.setShippingMethod" method="post">
+            <div id="checkout-shipping" class="step disabled clearfix">
+                <div class="step-header">
+                    <span class="step-number">3</span>
+                    <h3>Shipping</h3>
+                    <button type="button" class="btn btn-edit hide">
+                        Change <i class="icon-edit"></i>
+                    </button>
+                </div>
+
+                <div class="step-body">
+                    <div id="shipping-method-form" data-url="@routes.Checkouts.getShippingMethod" class="show">
+                        @* Load with shipping method template *@
+                    </div>
+
+                    <div class="hide">
+                        <ul id="shipping-method-summary" class="form-summary">
+                            <li>
+                                <span data-form="name">@setShippingForm.field("name").value</span>
+                                (<span data-form="price">@setShippingForm.field("price").value</span>)
+                            </li>
+                            <li>
+                                <span data-form="description"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-footer">
+                    <div class="messages"></div>
+                    <button type="submit" class="btn btn-success btn-next" data-loading-text="Saving...">
+                        Next <i class="icon-chevron-right icon-white"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <form id="form-billing-method" action="#" autocomplete="off">
+            <div id="checkout-billing" class="step disabled clearfix">
+                <div class="step-header">
+                    <span class="step-number">4</span>
+                    <h3>Payment</h3>
+                    <button type="button" class="btn btn-edit hide">
+                        Change <i class="icon-edit"></i>
+                    </button>
+                </div>
+
+                <div class="step-body">
+                    <div id="billing-method-form" class="show">
+                        <div class="clearfix"></div>
+                        <div class="well span5">
+                            <div class="choose-type controls controls-row">
+                                <div class="btn-group span4">
+                                    <button id="btn-paymenttype-cc" type="button" name="type"
+                                            class="paymenttype btn btn-primary disabled" value="Credit Card">Credit card</button>
+                                    <button id="btn-paymenttype-elv" type="button" name="type"
+                                            class="paymenttype btn" value="ELV">ELV</button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div id="payment-form-cc">
+                                <input class="card-amount-int" type="hidden" />
+                                <input class="card-currency" type="hidden" />
+                                <div class="controls controls-row">
+                                    <div class="span3"><label>Card number</label>
+                                        <input class="card-number" type="text" size="20" value="4111111111111111"/>
+                                    </div>
+                                    <div class="span1"><label>CVC</label>
+                                        <input class="card-cvc" type="text" size="4" value="111"/>
+                                    </div>
+                                </div>
+                                <div class="controls">
+                                    <div class="span4">
+                                        <label>Card holder</label>
+                                        <input class="card-holdername" type="text" size="20" value="John Doe"/>
+                                    </div>
+                                </div>
+                                <div class="controls">
+                                    <div class="span3">
+                                        <label>Valid until (MM/YYYY)</label>
+                                        <input class="card-expiry-month" type="text" size="2" value="12"/>
+                                        <span> / </span>
+                                        <input class="card-expiry-year" type="text" size="4" value="2015"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="payment-form-elv" style="display:none">
+                                <div class="controls">
+                                    <div class="span3">
+                                        <label>Account holder</label>
+                                        <input class="elv-holdername" type="text" size="20" value="John Doe"/>
+                                    </div>
+                                </div>
+                                <div class="controls controls-row">
+                                    <div class="span3"><label>Account number</label>
+                                        <input class="elv-account" type="text" size="20" value="1234567890"/>
+                                    </div>
+                                </div>
+                                <div class="controls">
+                                    <div class="span3">
+                                        <label>Bank code</label>
+                                        <input class="elv-bankcode" type="text" size="20" value="40050150"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hide">
+                        <ul id="billing-method-summary" class="form-summary">
+                            <li>
+                                <span data-form="elv-holdername" class="name"></span>
+                                <span data-form="card-holdername" class="name"></span>
+                            </li>
+                            <li>
+                                <span data-form="type"></span>
+                            </li>
+                            <li>
+                                <span data-form="card-number" class="number"></span>
+                                <span data-form="card-cvc" class="cvc"></span>
+                            </li>
+                            <li>
+                                <span data-form="card-expiry-month" class="month"></span>
+                                <span data-form="card-expiry-year" class="year"></span>
+                            </li>
+                            <li>
+                                <span data-form="card-amount"></span>
+                                <span data-form="card-currency"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-footer">
+                    <div class="messages"></div>
+                    <button type="submit" class="btn btn-success btn-next submit-button" data-loading-text="Validating...">
+                        Next <i class="icon-chevron-right icon-white"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <form id="form-checkout" action="@routes.Checkouts.submit" method="post">
+            <input type='hidden' name='paymillToken' value=""/>
+            <input type="hidden" name="cartSnapshot" value=""/>
+            <div id="checkout-footer" class="footer">
+                <div class="left">
+                    <a href="@getReturnUrl" class="btn">
+                        <i class="icon-chevron-left"></i> Go back
+                    </a>
+                </div>
+                <div class="right">
+                    @helper.orderSummary(cart)
+                    <button type="submit" class="btn btn-primary btn-large">
+                        Complete payment <i class="icon-shopping-cart icon-white"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+}{
+
+
+}

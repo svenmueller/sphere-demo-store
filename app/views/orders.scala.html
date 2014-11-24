@@ -1,0 +1,17 @@
+@(order: Order)
+
+@scripts = {
+}
+
+@main("Order", "order", scripts){
+    <div class="navigation">
+        @helper.topNavigation()
+    </div>
+}{
+    <div id="orders">
+        @helper.order(order)
+    </div>
+}{
+
+
+}

@@ -1,0 +1,63 @@
+@(cart: Cart)
+
+<script id="mini-cart-template" type="text/x-handlebars-template">
+    {{#if item}}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>DESCRIPTION</th>
+            <th>QTY</th>
+            <th>PRICE</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each item}}
+        <tr class="item-line">
+            <td class="item-description">
+                <div class="item-picture">
+                    <img src="{{image.thumbnail}}" />
+                </div>
+                <div class="clearfix">
+                    <h6><strong>{{productName}}</strong></h6>
+                    <ul class="unstyled">
+                        {{#each attribute}}
+                        <li>{{value}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </td>
+            <td class="item-quantity">{{quantity}}</td>
+            <td class="item-total-price">{{totalPrice}} {{currency}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="subtotal">
+        Order Sub Total
+        <span class="pull-right">{{totalPrice}} {{currency}}</span>
+    </div>
+    <div class="bottom">
+        <a href="@routes.Checkouts.show">Proceed to Checkout</a>
+    </div>
+    {{else}}
+        Oops, your cart is empty!
+    {{/if}}
+</script>
+
+<a id="link-cart" href="@routes.Carts.show">
+    <div class="btn-mini-cart">
+        <i class="icon-shopping-cart"></i>
+    </div>
+</a>
+
+<div id="mini-cart-popover" class="popover">
+    <div class="arrow"></div>
+    <div class="popover-inner">
+        <h3 class="popover-title"></h3>
+        <div class="popover-content">
+            <div id="mini-cart-content" data-url="@routes.Carts.get">
+                @* Load with template *@
+            </div>
+        </div>
+    </div>
+</div>

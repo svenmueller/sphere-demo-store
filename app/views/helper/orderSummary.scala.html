@@ -1,0 +1,51 @@
+@(cart: Cart)
+
+<script id="order-summary-template" type="text/x-handlebars-template">
+    <ul id="order-summary">
+        {{#if totalItemPrice}}
+        <li class="subtotal">
+            Total line items price
+            <span>{{totalItemPrice}} {{currency}}</span>
+        </li>
+        {{/if}}
+
+        {{#if customLineItems}}
+        {{#each customLineItems}}
+        <li class="customLineItems">
+            {{name}}
+            <span>{{money}} {{currency}}</span>
+        </li>
+        {{/each}}
+        {{/if}}
+
+        {{#if shippingPrice}}
+        <li>{{#ifGr shippingPrice 0 }}
+            Shipping cost
+            {{else}}
+            Free shipping
+            {{/ifGr}}
+            <span>{{shippingPrice}} {{currency}}</span>
+        </li>
+        {{/if}}
+
+        {{#if totalPrice}}
+        <li class="total">
+            Total price
+            <span>{{totalPrice}} {{currency}}</span>
+        </li>
+        {{/if}}
+
+        {{#if taxPortion}}
+        <li class="taxes">
+            {{#each taxPortion}}
+            {{#if included}} incl. {{else}} excl. {{/if}} {{rate}}% VAT
+            <span>{{amount}} {{currency}}</span>
+            {{/each}}
+        </li>
+        {{/if}}
+    </ul>
+</script>
+
+<div data-url="@routes.Carts.get" class="order-summary">
+    @* Load with template *@
+</div>
