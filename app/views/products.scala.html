@@ -15,7 +15,7 @@
     <div id="product-detail" class="product-detail clearfix">
         <div class="detail">
             <div class="info">
-                <img class="img-polaroid" src="@variant.getFeaturedImage.getSize(ImageSize.LARGE).getUrl"/>
+                <img class="img-polaroid" src="@variant.getFeaturedImage.getSize(ImageSize.ORIGINAL).getUrl"/>
                 <div class="product-name">
                     <p>@product.getName</p>
                 </div>
@@ -47,7 +47,7 @@
                         @for(variantColor <- getPossibleVariants(product, variant, "color")) {
                         <li class="@if(variantColor.getId == variant.getId){active}">
                             <a id="link-product-@product.getSlug-@variantColor.getId" href="@getProductUrl(product, variantColor, category)">
-                                <img src="@variantColor.getFeaturedImage.getSize(ImageSize.THUMBNAIL).getUrl"
+                                <img width="150px" height="150px" src="@variantColor.getFeaturedImage.getSize(ImageSize.ORIGINAL).getUrl"
                                      class="img-circle" title="@variantColor.getString("color")" />
                             </a>
                         </li>
