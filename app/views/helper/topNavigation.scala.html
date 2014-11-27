@@ -8,13 +8,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a id="link-home" class="brand" href="/">Demo Store</a>
+            <a href="/"><img src="/assets/images/angrybirds_logo.png" style="float:left;"/></a><a id="link-home" class="brand" sytelhref="/" href="/">Demo Store</a>
             <ul id="menu-navigation" class="nav" role="navigation">
                 @for(category <- getRootCategories) {
                 <li class="dropdown @getActiveClass(category, currentCategory) category-menu" id="header-menu-@category.getSlug">
                     <a id="link-category-@category.getSlug" href="@getCategoryUrl(category)" class="dropdown-toggle"
-                        role="button" @if(!category.getChildren.isEmpty) {data-toggle="dropdown"} data-target="#">
-                        @category.getName @if(!category.getChildren.isEmpty) {<b class="caret"></b>}
+                        role="button" @if(!category.getChildren.isEmpty) {data-toggle="dropdown"} data-target="#">@category.getName @if(!category.getChildren.isEmpty) {<b class="caret"></b>}
                     </a>
                     @if(!category.getChildren.isEmpty) {
                     <ul class="dropdown-menu" role="menu" aria-labelledby="link-category-@category.getSlug">
